@@ -2,7 +2,7 @@
 # Target platform: Google Cloud Run (Node 24 Active LTS, non-root)
 
 # Stage 1: Builder
-FROM node:24-slim AS builder
+FROM node:26-slim AS builder
 
 WORKDIR /app
 
@@ -18,7 +18,7 @@ COPY src/ ./src/
 RUN npm run build
 
 # Stage 2: Production runner
-FROM node:24-slim AS runner
+FROM node:26-slim AS runner
 
 WORKDIR /app
 
