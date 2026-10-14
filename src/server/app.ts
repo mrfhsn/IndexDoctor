@@ -8,14 +8,20 @@ import { Hono } from 'hono';
 import type { HealthLiveResponse, HealthResponse } from '../shared/contract.js';
 import type { Config } from './config.js';
 import { AppError, toErrorEnvelope } from './errors.js';
+import { TokenBucketRateLimiter } from './lib/token-bucket.js';
+import { circuitBreaker } from './llm/breaker.js';
 import { type Logger, logger as defaultLogger } from './logger.js';
-import type { SandboxManager } from './sandbox/manager.js';
+import { DiagnosePipeline } from './pipeline/diagnose.js';
+import type { PipelineRunner, SandboxEvaluator } from './pipeline/diagnose.js';
+import { createDiagnoseRoute } from './routes/diagnose.js';
 
 export interface AppDependencies {
   config: Config;
   logger?: Logger;
   startTime?: number;
-  sandboxManager?: SandboxManager;
+  sandboxManager?: SandboxEvaluator;
+  pipeline?: PipelineRunner;
+  rateLimiter?: TokenBucketRateLimiter;
 }
 
 export type AppEnv = {
@@ -29,6 +35,21 @@ export function createApp(deps: AppDependencies): Hono<AppEnv> {
   const log = deps.logger ?? defaultLogger;
   const startTime = deps.startTime ?? Date.now();
   let inFlightRequests = 0;
+
+  const pipeline =
+    deps.pipeline ??
+    new DiagnosePipeline({
+      config: deps.config,
+      logger: log,
+      sandboxManager: deps.sandboxManager,
+    });
+
+  const rateLimiter =
+    deps.rateLimiter ??
+    new TokenBucketRateLimiter({
+      ratePerMin: deps.config.RATE_LIMIT_PER_MIN,
+      burst: deps.config.RATE_LIMIT_BURST,
+    });
 
   // 1. Request ID and Request Logging Middleware
   app.use('*', async (c, next) => {
@@ -76,17 +97,22 @@ export function createApp(deps: AppDependencies): Hono<AppEnv> {
   // 4. Health Startup/Readiness Probe Endpoint
   app.get('/api/health', (c) => {
     const uptimeSec = Math.floor((Date.now() - startTime) / 1000);
-    const modelsList = deps.config.LLM_MODELS.split(',').map((id) => ({
-      id: id.trim(),
-      breaker: 'closed',
-    }));
+    const modelsList = deps.config.LLM_MODELS.split(',').map((id) => {
+      const modelId = id.trim();
+      return {
+        id: modelId,
+        breaker: circuitBreaker.getStatus(modelId).state,
+      };
+    });
 
-    const sandboxStatus = deps.sandboxManager?.getStatus() ?? {
-      state: 'not_started',
-      respawns: 0,
-      jobsSinceSpawn: 0,
-      queueLength: 0,
-    };
+    const sandboxStatus = deps.sandboxManager?.getStatus
+      ? deps.sandboxManager.getStatus()
+      : {
+          state: 'not_started',
+          respawns: 0,
+          jobsSinceSpawn: 0,
+          queueLength: 0,
+        };
 
     const isReady =
       deps.sandboxManager === undefined
@@ -111,11 +137,33 @@ export function createApp(deps: AppDependencies): Hono<AppEnv> {
     return c.json(response, isReady ? 200 : 503);
   });
 
-  // 5. Static Assets & SPA Handling
+  // 5. Mount API Routes (/api/diagnose)
+  app.route(
+    '/api',
+    createDiagnoseRoute({
+      config: deps.config,
+      pipeline,
+      rateLimiter,
+    }),
+  );
+
+  // 6. Static Assets & SPA Handling
   const clientDist = path.resolve(process.cwd(), 'dist/client');
   if (fs.existsSync(clientDist)) {
+    app.use('/assets/*', async (c, next) => {
+      await next();
+      c.header('Cache-Control', 'public, max-age=31536000, immutable');
+    });
+
     app.use('/*', serveStatic({ root: './dist/client' }));
-    app.get('*', serveStatic({ path: './dist/client/index.html' }));
+
+    app.get('*', async (c, next) => {
+      if (c.req.path.startsWith('/api')) {
+        return next();
+      }
+      c.header('Cache-Control', 'no-cache');
+      return serveStatic({ path: './dist/client/index.html' })(c, next);
+    });
   } else {
     app.get('/', (c) => {
       return c.html(`
@@ -136,7 +184,7 @@ export function createApp(deps: AppDependencies): Hono<AppEnv> {
     });
   }
 
-  // Global Error Handler
+  // Global Error Handler (Invariant I5)
   app.onError((err, c) => {
     const requestId = c.get('requestId') ?? crypto.randomUUID();
     const { status, body } = toErrorEnvelope(err, requestId);

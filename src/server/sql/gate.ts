@@ -8,6 +8,8 @@ export interface GateResult {
   querySql: string;
   catalog: Catalog;
   notices: string[];
+  queryAst: ParsedStatement;
+  referencedTables: Set<string>;
 }
 
 const MAX_SCHEMA_BYTES = 20000;
@@ -458,10 +460,14 @@ export async function validateGate(schemaSql: string, querySql: string): Promise
     );
   }
 
+  const queryAst = parsedQuery.stmts[0]!;
+
   return {
     statements: runnableStatements,
     querySql,
     catalog,
     notices,
+    queryAst,
+    referencedTables: queryInspection.referencedTables,
   };
 }

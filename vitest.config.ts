@@ -9,6 +9,7 @@ export default defineConfig({
           name: 'unit',
           include: ['src/**/*.test.ts', 'src/**/*.test.tsx', 'tests/unit/**/*.test.ts'],
           exclude: ['src/server/sandbox/**/*.test.ts', 'tests/integration/**'],
+          fileParallelism: false,
           environment: 'node',
         },
       },
@@ -16,7 +17,9 @@ export default defineConfig({
         test: {
           name: 'pglite',
           include: ['src/server/sandbox/**/*.test.ts', 'tests/pglite/**/*.test.ts'],
+          pool: 'forks',
           fileParallelism: false,
+          testTimeout: 20000,
           environment: 'node',
         },
       },
@@ -24,6 +27,9 @@ export default defineConfig({
         test: {
           name: 'integration',
           include: ['tests/integration/**/*.test.ts'],
+          pool: 'forks',
+          fileParallelism: false,
+          testTimeout: 20000,
           environment: 'node',
         },
       },
