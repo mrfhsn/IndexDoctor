@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "./dist/server",
+    "rootDir": "./src/server",
+    "types": ["node"]
+  },
+  "references": [{ "path": "./tsconfig.shared.json" }],
+  "include": ["src/server/**/*"],
+  "exclude": ["src/server/**/*.test.ts"]
+}

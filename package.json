@@ -1,0 +1,60 @@
+{
+  "name": "indexdoctor",
+  "version": "0.1.0",
+  "description": "Postgres index recommendations verified by an in-engine planner in WASM",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"vite\" \"tsx watch src/server/main.ts\"",
+    "build": "npm run build:client && npm run build:server",
+    "build:client": "vite build",
+    "build:server": "tsc -b tsconfig.server.json",
+    "start": "node dist/server/main.js",
+    "typecheck": "tsc -b",
+    "lint": "oxlint --type-aware --deny-warnings",
+    "lint:fast": "oxlint",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
+    "knip": "knip",
+    "check:forbidden": "node scripts/check-forbidden.mjs",
+    "test": "vitest run",
+    "test:unit": "vitest run --project unit",
+    "test:pglite": "vitest run --project pglite",
+    "test:integration": "vitest run --project integration",
+    "verify:fast": "npm run fmt:check && npm run lint:fast && npm run typecheck && npm run test:unit && npm run check:forbidden",
+    "verify": "npm run fmt:check && npm run lint && npm run typecheck && npm run knip && npm run check:forbidden && npm run test:unit && npm run test:pglite && npm run build && npm run test:integration",
+    "smoke": "node scripts/smoke.mjs",
+    "verify:deploy": "node scripts/verify-deploy.mjs"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "0.5.9",
+    "@google/genai": "2.29.1",
+    "@hono/node-server": "2.1.5",
+    "hono": "4.13.13",
+    "libpg-query": "18.1.5",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "4.3.3",
+    "@types/node": "24.19.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.2",
+    "concurrently": "10.0.6",
+    "knip": "6.41.0",
+    "lucide-react": "1.56.0",
+    "oxfmt": "0.73.0",
+    "oxlint": "1.88.0",
+    "oxlint-tsgolint": "7.0.2004",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "tailwindcss": "4.3.3",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "vite": "8.3.4",
+    "vitest": "5.0.4"
+  },
+  "engines": {
+    "node": ">=24 <25"
+  }
+}

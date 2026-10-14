@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "jsx": "react-jsx",
+    "composite": true,
+    "noEmit": true,
+    "types": ["node"]
+  },
+  "references": [
+    { "path": "./tsconfig.shared.json" },
+    { "path": "./tsconfig.server.json" },
+    { "path": "./tsconfig.client.json" }
+  ],
+  "include": ["tests/**/*", "src/**/*.test.ts", "src/**/*.test.tsx"]
+}

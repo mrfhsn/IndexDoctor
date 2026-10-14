@@ -1,0 +1,53 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "import", "promise", "node", "oxc", "react", "jsx-a11y"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "error",
+    "perf": "warn"
+  },
+  "options": {
+    "typeAware": true,
+    "denyWarnings": true,
+    "reportUnusedDisableDirectives": "error"
+  },
+  "rules": {
+    "eqeqeq": "error",
+    "no-console": "error",
+    "no-eval": "error",
+    "no-new-func": "error",
+    "no-implied-eval": "error",
+    "consistent-type-imports": "error",
+    "prefer-node-protocol": "error"
+  },
+  "overrides": [
+    {
+      "files": ["scripts/**/*.mjs", "scripts/**/*.js"],
+      "rules": {
+        "no-console": "off",
+        "no-unused-vars": "off",
+        "no-await-in-loop": "off",
+        "unicorn/consistent-function-scoping": "off",
+        "import/default": "off"
+      }
+    },
+    {
+      "files": ["tests/**/*.ts", "src/**/*.test.ts", "src/**/*.test.tsx"],
+      "rules": {
+        "no-console": "off"
+      }
+    },
+    {
+      "files": ["*.config.ts", "*.config.js", "vite.config.ts", "vitest.config.ts"],
+      "rules": {
+        "import/no-default-export": "off"
+      }
+    },
+    {
+      "files": ["src/client/**/*.{ts,tsx}"],
+      "rules": {
+        "import/no-unassigned-import": "off"
+      }
+    }
+  ]
+}
