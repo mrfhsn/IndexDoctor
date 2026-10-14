@@ -6,6 +6,6 @@
     "scripts/*.mjs",
     "tests/**/*.ts"
   ],
-  "project": ["src/**/*.ts", "scripts/*.mjs"],
-  "ignoreDependencies": ["tailwindcss", "lucide-react"]
+  "project": ["src/**/*.{ts,tsx}", "scripts/*.mjs"],
+  "ignoreDependencies": ["tailwindcss"]
 }

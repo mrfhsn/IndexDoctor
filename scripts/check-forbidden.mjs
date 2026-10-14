@@ -38,7 +38,8 @@ const CHECKS = [
     regex: /\blocalStorage\b/,
     fileFilter: (f) =>
       (f.startsWith('src/') || f.includes('bad-sample.ts')) &&
-      !f.includes('client/state/history.ts'),
+      !f.includes('client/state/history.ts') &&
+      !f.includes('client/state/history.test.ts'),
   },
   {
     id: 'forbidden-llm-params',

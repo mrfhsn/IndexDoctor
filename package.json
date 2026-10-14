@@ -11,7 +11,7 @@
     "build:server": "tsc -b tsconfig.server.json",
     "start": "node dist/server/main.js",
     "typecheck": "tsc -b",
-    "lint": "oxlint --type-aware --deny-warnings",
+    "lint": "oxlint --type-aware --threads 2 --deny-warnings",
     "lint:fast": "oxlint",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
