@@ -11,6 +11,7 @@
     "denyWarnings": true,
     "reportUnusedDisableDirectives": "error"
   },
+  "ignorePatterns": [".github/**", ".impeccable/**", ".agent/**"],
   "rules": {
     "eqeqeq": "error",
     "no-console": "error",
