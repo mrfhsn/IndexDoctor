@@ -15,12 +15,12 @@ export type CandidateIndexSpec = {
   where?: string | null;
 };
 
-export type ValidationFailure = {
+type ValidationFailure = {
   valid: false;
   reason: string;
 };
 
-export type ValidationSuccess = {
+type ValidationSuccess = {
   valid: true;
   spec: CandidateIndexSpec;
 };

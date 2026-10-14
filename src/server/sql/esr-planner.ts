@@ -3,7 +3,7 @@ import { type GeneratedDdl, buildIndexDdl } from './ddl.js';
 import { type CandidateIndexSpec, type IndexColumnSpec, validateIndexSpec } from './index-spec.js';
 import type { ParsedStatement } from './parse.js';
 
-export type EsrRole = 'Equality' | 'Sort' | 'Range' | 'Include' | 'Other';
+type EsrRole = 'Equality' | 'Sort' | 'Range' | 'Include' | 'Other';
 
 export type EsrClassification = {
   column: string;
@@ -11,13 +11,13 @@ export type EsrClassification = {
   reason: string;
 };
 
-export type EsrPlanSuccess = {
+type EsrPlanSuccess = {
   spec: CandidateIndexSpec;
   ddl: GeneratedDdl;
   esr: EsrClassification[];
 };
 
-export type EsrPlanFailure = {
+type EsrPlanFailure = {
   spec: null;
   reason: string;
 };

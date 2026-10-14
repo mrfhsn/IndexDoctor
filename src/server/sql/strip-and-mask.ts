@@ -1,7 +1,7 @@
-export interface MaskedQueryResult {
+export type MaskedQueryResult = {
   maskedSql: string;
   literalCount: number;
-}
+};
 
 /**
  * Strips comments and masks string literals from a query.
