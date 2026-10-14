@@ -1,4 +1,4 @@
-import { Database, Sparkles, ShieldCheck, Activity } from 'lucide-react';
+import { ShieldCheck, Activity } from 'lucide-react';
 import React from 'react';
 
 import type { HealthResponse } from '../../shared/contract.js';
@@ -14,19 +14,21 @@ export function Header({ health }: HeaderProps): React.JSX.Element {
     <header className="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="relative flex items-center justify-center w-9 h-9 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
-            <Database className="w-5 h-5" />
-            <Sparkles className="w-3 h-3 absolute -top-1 -right-1 text-emerald-300" />
+          <div className="relative flex items-center justify-center w-9 h-9 overflow-hidden">
+            <img src="/logo.avif" alt="IndexDoctor" className="w-full h-full object-contain" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-bold text-lg text-slate-100 tracking-tight">IndexDoctor</span>
-              <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-950/80 border border-emerald-800/60 text-emerald-400">
-                PGlite in WASM
+              <span className="font-bold text-lg text-slate-100 tracking-tight font-sans">
+                IndexDoctor
+              </span>
+              <span className="hidden sm:inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-mono font-medium bg-emerald-950/80 border border-emerald-800/60 text-emerald-400">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                PGlite WASM
               </span>
             </div>
-            <p className="text-xs text-slate-400 hidden sm:block">
-              In-engine Postgres index advisor with real planner before/after diffs
+            <p className="text-xs text-slate-400 hidden sm:block font-mono text-[11px]">
+              in-engine postgres index advisor // zero telemetry
             </p>
           </div>
         </div>

@@ -75,6 +75,11 @@ export function ActionBar({
           >
             <Play className="w-4 h-4 fill-current" />
             <span>Diagnose Index</span>
+            {hasInput && (
+              <span className="hidden sm:inline-flex items-center px-1.5 py-0.5 rounded bg-emerald-950/20 text-slate-950 font-mono text-[11px] font-bold">
+                {shortcutText}
+              </span>
+            )}
           </button>
         )}
       </div>

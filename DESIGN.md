@@ -19,37 +19,37 @@ colors:
   text-subtle: '#64748b'
 typography:
   display:
-    fontFamily: "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+    fontFamily: "'Inter', ui-sans-serif, system-ui, sans-serif"
     fontSize: '1.25rem'
     fontWeight: 700
     lineHeight: 1.2
     letterSpacing: '-0.025em'
   headline:
-    fontFamily: "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+    fontFamily: "'Inter', ui-sans-serif, system-ui, sans-serif"
     fontSize: '1rem'
     fontWeight: 600
     lineHeight: 1.4
     letterSpacing: '-0.015em'
   title:
-    fontFamily: "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+    fontFamily: "'Inter', ui-sans-serif, system-ui, sans-serif"
     fontSize: '0.875rem'
     fontWeight: 600
     lineHeight: 1.4
     letterSpacing: '0.05em'
   body:
-    fontFamily: "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+    fontFamily: "'Inter', ui-sans-serif, system-ui, sans-serif"
     fontSize: '0.875rem'
     fontWeight: 400
     lineHeight: 1.5
     letterSpacing: 'normal'
   label:
-    fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace"
+    fontFamily: "'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
     fontSize: '0.75rem'
     fontWeight: 500
     lineHeight: 1.4
     letterSpacing: 'normal'
   caption:
-    fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace"
+    fontFamily: "'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
     fontSize: '0.6875rem'
     fontWeight: 500
     lineHeight: 1.4

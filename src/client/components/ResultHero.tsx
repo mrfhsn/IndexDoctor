@@ -108,14 +108,14 @@ export function ResultHero({ result }: ResultHeroProps): React.JSX.Element {
       {/* Vital Signs Grid (3 Cards) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         {/* Card 1: Cost Reduction */}
-        <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col justify-between">
+        <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800 flex flex-col justify-between">
           <div className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2 flex items-center justify-between">
-            <span>Planner Cost</span>
+            <span className="font-mono">Planner Cost Model</span>
             <TrendingDown className="w-4 h-4 text-emerald-400" />
           </div>
 
           {verification.status === 'verified' ? (
-            <div>
+            <div className="space-y-2">
               <div className="flex items-baseline gap-2">
                 <span className="text-2xl font-bold font-mono text-emerald-400">
                   {verification.costAfter.toLocaleString(undefined, {
@@ -131,9 +131,22 @@ export function ResultHero({ result }: ResultHeroProps): React.JSX.Element {
                   -{verification.costReductionPercent}%
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 mt-1 font-mono">
-                {verification.costRatio.toFixed(1)}x planner speedup factor
-              </p>
+
+              {/* Visual Cost Reduction Gauge */}
+              <div className="space-y-1 pt-1">
+                <div className="w-full bg-slate-950 h-2 rounded-full overflow-hidden border border-slate-800 flex">
+                  <div
+                    className="bg-emerald-500 h-full rounded-full transition-all duration-500"
+                    style={{
+                      width: `${Math.max(2, Math.min(100, 100 - verification.costReductionPercent))}%`,
+                    }}
+                  />
+                </div>
+                <div className="flex items-center justify-between text-[11px] font-mono text-slate-400">
+                  <span>{verification.costRatio.toFixed(1)}x faster</span>
+                  <span>500k simulated rows</span>
+                </div>
+              </div>
             </div>
           ) : (
             <div>
@@ -147,26 +160,26 @@ export function ResultHero({ result }: ResultHeroProps): React.JSX.Element {
         </div>
 
         {/* Card 2: Scan Transformation */}
-        <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col justify-between">
+        <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800 flex flex-col justify-between">
           <div className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2 flex items-center justify-between">
-            <span>Scan Transformation</span>
-            <ArrowRight className="w-4 h-4 text-slate-500" />
+            <span className="font-mono">Scan Transformation</span>
+            <ArrowRight className="w-4 h-4 text-slate-400" />
           </div>
 
           {result.plans.before && result.plans.after ? (
-            <div>
+            <div className="space-y-2">
               <div className="flex items-center gap-2 font-mono text-xs">
-                <span className="px-2 py-1 rounded bg-rose-950/60 border border-rose-800/60 text-rose-300 font-medium truncate">
+                <div className="flex-1 px-2.5 py-1.5 rounded-lg bg-rose-950/70 border border-rose-700/60 text-rose-300 font-semibold text-center truncate">
                   {result.plans.before.primaryScan}
-                </span>
-                <ArrowRight className="w-3.5 h-3.5 text-slate-600 shrink-0" />
-                <span className="px-2 py-1 rounded bg-emerald-950/60 border border-emerald-800/60 text-emerald-300 font-medium truncate">
+                </div>
+                <ArrowRight className="w-4 h-4 text-emerald-400 shrink-0" />
+                <div className="flex-1 px-2.5 py-1.5 rounded-lg bg-emerald-950/70 border border-emerald-600/70 text-emerald-300 font-semibold text-center truncate">
                   {result.plans.after.primaryScan}
-                </span>
+                </div>
               </div>
-              <p className="text-[11px] text-slate-400 mt-1 truncate">
+              <p className="text-[11px] text-slate-400 truncate font-mono">
                 {result.plans.after.usesIndexes.length > 0
-                  ? `Used: ${result.plans.after.usesIndexes.join(', ')}`
+                  ? `Target: ${result.plans.after.usesIndexes.join(', ')}`
                   : 'Sequential scan retained'}
               </p>
             </div>
@@ -178,14 +191,14 @@ export function ResultHero({ result }: ResultHeroProps): React.JSX.Element {
         </div>
 
         {/* Card 3: Engine Provenance */}
-        <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col justify-between">
+        <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800 flex flex-col justify-between">
           <div className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2 flex items-center justify-between">
-            <span>Advisor Provenance</span>
+            <span className="font-mono">Engine Provenance</span>
             <Cpu className="w-4 h-4 text-blue-400" />
           </div>
 
-          <div>
-            <div className="flex items-center gap-1.5 font-semibold text-sm text-slate-200">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 font-semibold text-sm text-slate-200">
               {result.source.proposedBy === 'llm' ? (
                 <>
                   <Sparkles className="w-4 h-4 text-emerald-400" />
@@ -198,10 +211,12 @@ export function ResultHero({ result }: ResultHeroProps): React.JSX.Element {
                 </>
               )}
             </div>
-            <p className="text-[11px] text-slate-400 font-mono mt-1">
-              gate: {result.timingsMs.gate}ms • propose: {result.timingsMs.propose}ms • eval:{' '}
-              {result.timingsMs.evaluate}ms
-            </p>
+            <div className="p-2 rounded-lg bg-slate-950 border border-slate-800 font-mono text-[11px] text-slate-400 flex items-center justify-between">
+              <span>SANDBOX TIME</span>
+              <span className="text-emerald-400 font-semibold">
+                {result.timingsMs.total} ms total
+              </span>
+            </div>
           </div>
         </div>
       </div>

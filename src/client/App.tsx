@@ -170,18 +170,26 @@ export function App(): React.JSX.Element {
   const hasInput = Boolean(state.schema.trim() && state.query.trim());
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-emerald-500/30 selection:text-emerald-200">
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-emerald-500/30 selection:text-emerald-200 relative">
       <Header health={health} />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        {/* Hero Tagline */}
-        <div className="text-center max-w-3xl mx-auto space-y-2">
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-100">
-            Real Postgres Planner Diffs. <span className="text-emerald-400">Zero Login.</span>
+        {/* Cockpit Hero Section */}
+        <div className="text-center max-w-3xl mx-auto space-y-3 pt-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/90 border border-slate-800 text-[11px] font-mono text-slate-300">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            <span>PGLITE IN-BROWSER WASM</span>
+            <span className="text-slate-600">•</span>
+            <span className="text-slate-400">INSTANT PLANNER TELEMETRY</span>
+          </div>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-100">
+            Real Postgres Planner Diffs. <br />
+            <span className="text-emerald-400">Zero Login.</span>
           </h1>
-          <p className="text-sm sm:text-base text-slate-400 leading-relaxed">
-            Validate composite indexes with the official Postgres planner running in WASM. Compare
-            before and after plan trees with copy-ready DDL and ORM definitions.
+          <p className="text-sm sm:text-base text-slate-400 leading-relaxed max-w-2xl mx-auto">
+            Benchmark and test composite indexes in an isolated PostgreSQL planner sandbox.
+            Mathematically verify cost reductions with before/after plan trees before touching
+            production.
           </p>
         </div>
 

@@ -44,7 +44,7 @@ function PlanNodeView({
               <button
                 type="button"
                 onClick={() => setExpanded(!expanded)}
-                className="p-1 -m-0.5 text-slate-400 hover:text-slate-200 flex items-center justify-center min-w-[24px] min-h-[24px] rounded cursor-pointer"
+                className="p-1 -m-0.5 text-slate-400 hover:text-slate-200 flex items-center justify-center min-w-6 min-h-6 rounded cursor-pointer"
                 aria-label={expanded ? 'Collapse plan node' : 'Expand plan node'}
               >
                 {expanded ? (

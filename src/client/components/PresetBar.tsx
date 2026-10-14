@@ -39,11 +39,14 @@ export function PresetBar({
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
-          Try a Golden Preset (1-Click Run)
-        </span>
-        <span className="text-xs text-slate-500 hidden sm:inline">
-          Pre-configured workloads verified on PGlite WASM
+        <div className="flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+          <span className="text-xs font-semibold uppercase tracking-wider text-slate-300 font-mono">
+            Diagnostic Presets (1-Click Evaluation)
+          </span>
+        </div>
+        <span className="text-xs text-slate-400 hidden sm:inline font-mono text-[11px]">
+          pglite v18 wasm planner isolate
         </span>
       </div>
 
@@ -62,8 +65,8 @@ export function PresetBar({
               aria-label={`Select ${preset.name} preset`}
               className={`text-left p-3.5 rounded-xl border transition-all duration-150 flex flex-col justify-between group ${
                 isSelected
-                  ? 'bg-slate-900 border-emerald-500/60 ring-1 ring-emerald-500/30'
-                  : 'bg-slate-900/60 border-slate-800 hover:border-slate-700 hover:bg-slate-900'
+                  ? 'bg-slate-900 border-emerald-500/80 ring-1 ring-emerald-500/40'
+                  : 'bg-slate-900/80 border-slate-800 hover:border-slate-700 hover:bg-slate-900'
               } ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
             >
               <div>
