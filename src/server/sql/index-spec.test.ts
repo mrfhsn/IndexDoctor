@@ -170,4 +170,16 @@ describe('Index Spec Validator (sql/index-spec.ts)', () => {
       expect(res.reason).toContain('equivalent to existing index "idx_users_email"');
     }
   });
+
+  it('allows candidate index with INCLUDE when existing index has no INCLUDE', async () => {
+    const { catalog, queryTables } = await getCatalogAndTables();
+
+    const covering: CandidateIndexSpec = {
+      table: 'users',
+      columns: [{ name: 'email', direction: 'asc' }],
+      include: ['status'],
+    };
+    const res = await validateIndexSpec(covering, catalog, queryTables);
+    expect(res.valid).toBe(true);
+  });
 });

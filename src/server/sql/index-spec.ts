@@ -199,7 +199,13 @@ export async function validateIndexSpec(
         );
       });
 
-      if (matchesAll && !whereClause) {
+      const existingIncludes = (existing.include || []).map((c) => c.toLowerCase()).toSorted();
+      const specIncludes = [...includeList].map((c) => c.toLowerCase()).toSorted();
+      const sameIncludes =
+        existingIncludes.length === specIncludes.length &&
+        existingIncludes.every((inc, idx) => inc === specIncludes[idx]);
+
+      if (matchesAll && !whereClause && sameIncludes) {
         return {
           valid: false,
           reason: `Candidate index is equivalent to existing index "${existing.name}".`,

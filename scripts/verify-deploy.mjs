@@ -10,6 +10,8 @@ import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { PRESETS } from '../dist/shared/presets/presets.js';
+
 const isSkeleton = process.argv.includes('--skeleton') || process.env.GATE === '1';
 const filteredArgs = process.argv.slice(2).filter((a) => !a.startsWith('--'));
 const serviceName = filteredArgs[0] || 'indexdoctor';
@@ -195,15 +197,117 @@ async function main() {
     return 'HTTP 200 HTML rendered';
   });
 
-  // 7. Cloud Logging Verification
-  await step('Cloud Run Logging & Secret Privacy Check (I4)', async () => {
-    // Send a canary request with sentinel ID
-    const canaryId = `canary_${Date.now()}_${Math.random().toString(36).substring(7)}`;
-    await fetch(`${serviceUrl}/api/health/live`, {
-      headers: { 'x-canary-probe': canaryId },
+  if (!isSkeleton) {
+    // 7. Test 3 Golden Presets
+    for (const preset of PRESETS) {
+      await step(`POST /api/diagnose preset [${preset.id}]`, async () => {
+        const res = await fetch(`${serviceUrl}/api/diagnose`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            schema: preset.schema,
+            query: preset.query,
+            presetId: preset.id,
+          }),
+        });
+
+        if (res.status !== 200) {
+          const errText = await res.text();
+          throw new Error(`Expected 200, got ${res.status}: ${errText}`);
+        }
+
+        const data = await res.json();
+        if (data.outcome !== 'improved') {
+          throw new Error(`Expected outcome 'improved', got '${data.outcome}'`);
+        }
+
+        const usesIdx = data.plans?.after?.usesIndexes || [];
+        const costBefore = data.plans?.before?.cost?.total;
+        const costAfter = data.plans?.after?.cost?.total;
+        return `outcome=${data.outcome}, verification=${data.verification?.status}, cost: ${costBefore ?? 'n/a'} -> ${costAfter ?? 'n/a'}, uses: [${usesIdx.join(', ')}]`;
+      });
+    }
+
+    // 8. Hostile COPY schema & recovery
+    await step('Hostile statement returns 422 & service recovers', async () => {
+      const hostileRes = await fetch(`${serviceUrl}/api/diagnose`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          schema: 'COPY sensitive_data FROM STDIN;\n1\tsecret\n\\.',
+          query: 'SELECT * FROM sensitive_data;',
+        }),
+      });
+
+      if (hostileRes.status !== 422) {
+        throw new Error(`Expected 422, got ${hostileRes.status}`);
+      }
+
+      const recoveryRes = await fetch(`${serviceUrl}/api/diagnose`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          schema: PRESETS[0].schema,
+          query: PRESETS[0].query,
+          presetId: PRESETS[0].id,
+        }),
+      });
+
+      if (recoveryRes.status !== 200) {
+        throw new Error(`Service failed to recover. Status: ${recoveryRes.status}`);
+      }
+
+      return '422 on hostile statement; 200 on recovery request';
     });
 
-    // Check Cloud Run logs for errors
+    // 9. Rate limiting & spoofed X-Forwarded-For check
+    await step('Rate limit with spoofed leftmost XFF reaches 429', async () => {
+      const clientIp = '203.0.113.195';
+
+      // Send 15 concurrent requests from the same clientIp to exceed the burst bucket (6)
+      const promises = Array.from({ length: 15 }, async (_, i) => {
+        const spoofedXff = `10.0.0.${i}, ${clientIp}`;
+        const res = await fetch(`${serviceUrl}/api/diagnose`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Forwarded-For': spoofedXff,
+          },
+          body: JSON.stringify({
+            schema: PRESETS[0].schema,
+            query: `${PRESETS[0].query} -- rate limit probe ${i}`,
+            presetId: PRESETS[0].id,
+          }),
+        });
+        return res.status;
+      });
+
+      const statuses = await Promise.all(promises);
+      const hit429 = statuses.includes(429);
+
+      if (!hit429) {
+        throw new Error(`Did not hit 429 rate limit. Received statuses: ${statuses.join(', ')}`);
+      }
+
+      return `Rate limiter enforced 429 using rightmost XFF (${statuses.filter((s) => s === 429).length}/15 rejected with 429)`;
+    });
+  }
+
+  // 10. Cloud Logging & Invariant I4 Check
+  await step('Cloud Run Logging & Secret Privacy Check (I4)', async () => {
+    const sentinelTable = `zz_canary_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+
+    // Send a query containing this sentinel table name
+    await fetch(`${serviceUrl}/api/diagnose`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        schema: `CREATE TABLE ${sentinelTable} (id serial PRIMARY KEY, val text);`,
+        query: `SELECT * FROM ${sentinelTable} WHERE val = 'probe';`,
+      }),
+    });
+
+    // Read Cloud Run logs
     const logsOutput = execFileSync(
       gcloud,
       [
@@ -223,9 +327,14 @@ async function main() {
       if (payloadStr.includes('AIza') || payloadStr.includes('GEMINI_API_KEY=')) {
         throw new Error('POTENTIAL SECRET LEAK IN CLOUD LOGS!');
       }
+      if (payloadStr.includes(sentinelTable)) {
+        throw new Error(
+          `Sentinel table name "${sentinelTable}" leaked into Cloud Logs! Violates Invariant I4.`,
+        );
+      }
     }
 
-    return `Read ${logEntries.length} log entries. No leaks or unhandled errors.`;
+    return `Read ${logEntries.length} log entries. No secret leaks or sentinel query leaks.`;
   });
 
   console.log('\n======================================================');
@@ -236,7 +345,7 @@ async function main() {
       Step: r.name,
       Status: r.status,
       'Time (ms)': r.durationMs,
-      Detail: r.detail.slice(0, 50),
+      Detail: (r.detail || '').slice(0, 60),
     })),
   );
 

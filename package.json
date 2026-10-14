@@ -24,7 +24,8 @@
     "verify:fast": "npm run fmt:check && npm run lint:fast && npm run typecheck && npm run test:unit && npm run check:forbidden",
     "verify": "npm run fmt:check && npm run lint && npm run typecheck && npm run knip && npm run check:forbidden && npm run test:unit && npm run test:pglite && npm run build && npm run test:integration",
     "smoke": "node scripts/smoke.mjs",
-    "verify:deploy": "node scripts/verify-deploy.mjs"
+    "verify:deploy": "node scripts/verify-deploy.mjs",
+    "measure": "node scripts/measure.mjs"
   },
   "dependencies": {
     "@electric-sql/pglite": "0.5.9",
