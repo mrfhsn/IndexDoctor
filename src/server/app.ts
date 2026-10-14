@@ -9,11 +9,13 @@ import type { HealthLiveResponse, HealthResponse } from '../shared/contract.js';
 import type { Config } from './config.js';
 import { AppError, toErrorEnvelope } from './errors.js';
 import { type Logger, logger as defaultLogger } from './logger.js';
+import type { SandboxManager } from './sandbox/manager.js';
 
 export interface AppDependencies {
   config: Config;
   logger?: Logger;
   startTime?: number;
+  sandboxManager?: SandboxManager;
 }
 
 export type AppEnv = {
@@ -79,14 +81,26 @@ export function createApp(deps: AppDependencies): Hono<AppEnv> {
       breaker: 'closed',
     }));
 
+    const sandboxStatus = deps.sandboxManager?.getStatus() ?? {
+      state: 'not_started',
+      respawns: 0,
+      jobsSinceSpawn: 0,
+      queueLength: 0,
+    };
+
+    const isReady =
+      deps.sandboxManager === undefined
+        ? true
+        : sandboxStatus.state === 'ready' || sandboxStatus.state === 'busy';
+
     const response: HealthResponse = {
-      ready: true,
+      ready: isReady,
       version: '0.1.0',
       uptimeSec,
       sandbox: {
-        state: 'not_started', // Gate 1 placeholder before worker is hooked in Gate 2
-        respawns: 0,
-        jobsSinceSpawn: 0,
+        state: sandboxStatus.state,
+        respawns: sandboxStatus.respawns,
+        jobsSinceSpawn: sandboxStatus.jobsSinceSpawn,
       },
       llm: {
         configured: Boolean(deps.config.GEMINI_API_KEY),
@@ -94,7 +108,7 @@ export function createApp(deps: AppDependencies): Hono<AppEnv> {
       },
     };
 
-    return c.json(response, 200);
+    return c.json(response, isReady ? 200 : 503);
   });
 
   // 5. Static Assets & SPA Handling

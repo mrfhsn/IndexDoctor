@@ -1,6 +1,11 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
-  "entry": ["scripts/*.mjs"],
-  "project": ["src/**/*.ts", "src/**/*.tsx", "scripts/*.mjs"],
-  "ignoreDependencies": ["tailwindcss"]
+  "entry": [
+    "src/server/sandbox/worker.ts",
+    "src/shared/presets/presets.ts",
+    "scripts/*.mjs",
+    "tests/**/*.ts"
+  ],
+  "project": ["src/**/*.ts", "scripts/*.mjs"],
+  "ignoreDependencies": ["tailwindcss", "lucide-react"]
 }

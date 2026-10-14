@@ -3,6 +3,7 @@ import { serve } from '@hono/node-server';
 import { createApp } from './app.js';
 import { parseConfig } from './config.js';
 import { logger } from './logger.js';
+import { SandboxManager } from './sandbox/manager.js';
 
 function bootstrap(): void {
   const config = parseConfig();
@@ -14,7 +15,8 @@ function bootstrap(): void {
     models: config.LLM_MODELS,
   });
 
-  const app = createApp({ config });
+  const sandboxManager = new SandboxManager({ config, logger });
+  const app = createApp({ config, logger, sandboxManager });
 
   const server = serve(
     {
@@ -29,10 +31,17 @@ function bootstrap(): void {
     },
   );
 
+  // Background start of sandbox worker & startup canary
+  sandboxManager.start().catch((err: unknown) => {
+    logger.error('Failed to start sandbox worker on startup', {
+      error: err instanceof Error ? err.message : String(err),
+    });
+  });
+
   // Process-level termination and rejection handlers
   let isShuttingDown = false;
 
-  function shutdown(signal: string): void {
+  async function shutdown(signal: string): Promise<void> {
     if (isShuttingDown) return;
     isShuttingDown = true;
     logger.info(`Received ${signal}. Initiating graceful shutdown...`);
@@ -42,6 +51,14 @@ function bootstrap(): void {
       process.exit(1);
     }, 8000);
     forceExitTimeout.unref();
+
+    try {
+      await sandboxManager.stop();
+    } catch (err) {
+      logger.error('Error stopping sandbox manager', {
+        error: err instanceof Error ? err.message : String(err),
+      });
+    }
 
     server.close(() => {
       logger.info('Closed HTTP listener. Exiting cleanly.');
