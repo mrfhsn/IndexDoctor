@@ -52,7 +52,7 @@ export function ErrorState({ error, onRetry }: ErrorStateProps): React.JSX.Eleme
                 {error.code}
               </span>
               {error.requestId && (
-                <span className="text-xs font-mono text-slate-500">
+                <span className="text-xs font-mono text-slate-400">
                   req: {error.requestId.slice(0, 8)}
                 </span>
               )}
@@ -71,7 +71,7 @@ export function ErrorState({ error, onRetry }: ErrorStateProps): React.JSX.Eleme
           onClick={onRetry}
           className={`shrink-0 px-3.5 py-2 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer ${
             countdown !== null && countdown > 0
-              ? 'bg-slate-900 border-slate-800 text-slate-500 cursor-not-allowed'
+              ? 'bg-slate-900 border-slate-800 text-slate-400 cursor-not-allowed'
               : 'bg-slate-900 border-slate-700 hover:bg-slate-800 text-slate-200'
           }`}
         >

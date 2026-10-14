@@ -177,10 +177,7 @@ export function App(): React.JSX.Element {
         {/* Hero Tagline */}
         <div className="text-center max-w-3xl mx-auto space-y-2">
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-100">
-            Real Postgres Planner Diffs.{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">
-              Zero Login.
-            </span>
+            Real Postgres Planner Diffs. <span className="text-emerald-400">Zero Login.</span>
           </h1>
           <p className="text-sm sm:text-base text-slate-400 leading-relaxed">
             Validate composite indexes with the official Postgres planner running in WASM. Compare

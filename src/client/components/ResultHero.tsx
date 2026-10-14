@@ -73,7 +73,7 @@ export function ResultHero({ result }: ResultHeroProps): React.JSX.Element {
               </span>
             )}
 
-            <span className="text-xs text-slate-500 font-mono">
+            <span className="text-xs text-slate-400 font-mono">
               req: {result.requestId.slice(0, 8)}
             </span>
           </div>
@@ -122,7 +122,7 @@ export function ResultHero({ result }: ResultHeroProps): React.JSX.Element {
                     maximumFractionDigits: 1,
                   })}
                 </span>
-                <span className="text-xs text-slate-500 font-mono line-through">
+                <span className="text-xs text-slate-400 font-mono line-through">
                   {verification.costBefore.toLocaleString(undefined, {
                     maximumFractionDigits: 1,
                   })}
@@ -198,7 +198,7 @@ export function ResultHero({ result }: ResultHeroProps): React.JSX.Element {
                 </>
               )}
             </div>
-            <p className="text-[11px] text-slate-500 font-mono mt-1">
+            <p className="text-[11px] text-slate-400 font-mono mt-1">
               gate: {result.timingsMs.gate}ms • propose: {result.timingsMs.propose}ms • eval:{' '}
               {result.timingsMs.evaluate}ms
             </p>

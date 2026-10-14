@@ -49,13 +49,21 @@ export function MigrationOutput({
         </div>
 
         {/* Tab Buttons */}
-        <div className="flex items-center gap-1 p-1 rounded-lg bg-slate-900 border border-slate-800 text-xs">
+        <div
+          role="tablist"
+          aria-label="Migration format selector"
+          className="flex items-center gap-1 p-1 rounded-lg bg-slate-900 border border-slate-800 text-xs"
+        >
           <button
             type="button"
+            role="tab"
+            id="tab-postgres"
+            aria-selected={activeTab === 'postgres'}
+            aria-controls="migration-code-panel"
             onClick={() => onTabChange('postgres')}
             className={`px-3 py-1 rounded-md transition-colors cursor-pointer font-medium ${
               activeTab === 'postgres'
-                ? 'bg-emerald-500 text-slate-950 shadow-sm'
+                ? 'bg-emerald-500 text-slate-950'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
@@ -63,10 +71,14 @@ export function MigrationOutput({
           </button>
           <button
             type="button"
+            role="tab"
+            id="tab-drizzle"
+            aria-selected={activeTab === 'drizzle'}
+            aria-controls="migration-code-panel"
             onClick={() => onTabChange('drizzle')}
             className={`px-3 py-1 rounded-md transition-colors cursor-pointer font-medium ${
               activeTab === 'drizzle'
-                ? 'bg-emerald-500 text-slate-950 shadow-sm'
+                ? 'bg-emerald-500 text-slate-950'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
@@ -74,10 +86,14 @@ export function MigrationOutput({
           </button>
           <button
             type="button"
+            role="tab"
+            id="tab-prisma"
+            aria-selected={activeTab === 'prisma'}
+            aria-controls="migration-code-panel"
             onClick={() => onTabChange('prisma')}
             className={`px-3 py-1 rounded-md transition-colors cursor-pointer font-medium ${
               activeTab === 'prisma'
-                ? 'bg-emerald-500 text-slate-950 shadow-sm'
+                ? 'bg-emerald-500 text-slate-950'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
@@ -87,10 +103,15 @@ export function MigrationOutput({
       </div>
 
       {/* Code Display Area */}
-      <div className="relative rounded-xl border border-slate-800 bg-slate-900 overflow-hidden">
+      <div
+        id="migration-code-panel"
+        role="tabpanel"
+        aria-labelledby={`tab-${activeTab}`}
+        className="relative rounded-xl border border-slate-800 bg-slate-900 overflow-hidden"
+      >
         <div className="px-4 py-2 bg-slate-950/60 border-b border-slate-800/80 flex items-center justify-between text-xs text-slate-400 font-mono">
           <div className="flex items-center gap-1.5">
-            <FileCode2 className="w-3.5 h-3.5 text-slate-500" />
+            <FileCode2 className="w-3.5 h-3.5 text-slate-400" />
             <span>
               {activeTab === 'postgres'
                 ? 'migration.sql (Non-blocking concurrent)'

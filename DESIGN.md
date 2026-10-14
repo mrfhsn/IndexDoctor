@@ -48,6 +48,12 @@ typography:
     fontWeight: 500
     lineHeight: 1.4
     letterSpacing: 'normal'
+  caption:
+    fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace"
+    fontSize: '0.6875rem'
+    fontWeight: 500
+    lineHeight: 1.4
+    letterSpacing: 'normal'
 rounded:
   sm: '4px'
   md: '6px'

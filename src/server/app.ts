@@ -174,7 +174,7 @@ export function createApp(deps: AppDependencies): Hono<AppEnv> {
             <meta name="viewport" content="width=device-width, initial-scale=1" />
             <title>IndexDoctor</title>
           </head>
-          <body style="background: #020617; color: #f8fafc; font-family: sans-serif; padding: 2rem;">
+          <body style="background: #020617; color: #f1f5f9; font-family: sans-serif; padding: 2rem;">
             <h1>IndexDoctor</h1>
             <p>Postgres index recommendations verified by an in-engine planner in WASM.</p>
             <p>Status: Walking Skeleton Online</p>

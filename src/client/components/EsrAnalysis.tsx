@@ -58,7 +58,7 @@ export function EsrAnalysis({ recommendation }: EsrAnalysisProps): React.JSX.Ele
                 className="flex items-center gap-1.5 p-2 rounded-lg bg-slate-950 border border-slate-800"
               >
                 <span
-                  className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border uppercase ${style.bg} ${style.border} ${style.text}`}
+                  className={`text-[11px] font-mono font-bold px-2 py-0.5 rounded border uppercase ${style.bg} ${style.border} ${style.text}`}
                 >
                   {item.role}
                 </span>
@@ -74,7 +74,7 @@ export function EsrAnalysis({ recommendation }: EsrAnalysisProps): React.JSX.Ele
         <div className="space-y-2 pt-2 border-t border-slate-800">
           {esr.map((item) => (
             <div key={item.column} className="flex items-start gap-2 text-xs">
-              <Info className="w-3.5 h-3.5 text-slate-500 shrink-0 mt-0.5" />
+              <Info className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
               <div>
                 <span className="font-mono font-semibold text-slate-300">"{item.column}"</span>:
                 <span className="text-slate-400 ml-1.5">{item.reason}</span>

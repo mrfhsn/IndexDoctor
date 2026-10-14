@@ -85,6 +85,10 @@
       "label": {
         "displayName": "Mono Label",
         "purpose": "SQL code, query plans, timestamps, and request IDs."
+      },
+      "caption": {
+        "displayName": "Mono Caption",
+        "purpose": "Micro telemetry labels, keycap indicators, and status chips."
       }
     },
     "shadows": [

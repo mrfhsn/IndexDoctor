@@ -62,7 +62,7 @@ export function PresetBar({
               aria-label={`Select ${preset.name} preset`}
               className={`text-left p-3.5 rounded-xl border transition-all duration-150 flex flex-col justify-between group ${
                 isSelected
-                  ? 'bg-slate-900 border-emerald-500/60 shadow-lg shadow-emerald-950/20 ring-1 ring-emerald-500/30'
+                  ? 'bg-slate-900 border-emerald-500/60 ring-1 ring-emerald-500/30'
                   : 'bg-slate-900/60 border-slate-800 hover:border-slate-700 hover:bg-slate-900'
               } ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
             >
@@ -82,13 +82,13 @@ export function PresetBar({
                       {preset.name}
                     </span>
                   </div>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-950/80 border border-emerald-800/60 text-emerald-300">
+                  <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-emerald-950/80 border border-emerald-800/60 text-emerald-300">
                     {metric.badge}
                   </span>
                 </div>
                 <p className="text-xs text-slate-400 line-clamp-1">{preset.description}</p>
               </div>
-              <div className="mt-2 text-[11px] font-mono text-slate-500 group-hover:text-slate-400 flex items-center justify-between">
+              <div className="mt-2 text-[11px] font-mono text-slate-400 group-hover:text-slate-300 flex items-center justify-between">
                 <span>{metric.desc}</span>
                 <span className="text-emerald-400 group-hover:translate-x-0.5 transition-transform">
                   Run →

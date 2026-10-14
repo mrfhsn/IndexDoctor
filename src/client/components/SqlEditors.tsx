@@ -38,7 +38,7 @@ export function SqlEditors({
           <div className="flex items-center gap-3">
             <span
               className={`text-[11px] font-mono ${
-                schemaNearLimit ? 'text-amber-400 font-bold' : 'text-slate-500'
+                schemaNearLimit ? 'text-amber-400 font-bold' : 'text-slate-400'
               }`}
             >
               {schema.length.toLocaleString()} / {MAX_SCHEMA_LENGTH.toLocaleString()}
@@ -47,7 +47,7 @@ export function SqlEditors({
               <button
                 type="button"
                 onClick={() => onSchemaChange('')}
-                className="text-slate-500 hover:text-slate-300 transition-colors"
+                className="p-1 -m-1 text-slate-400 hover:text-slate-200 transition-colors flex items-center justify-center min-w-[28px] min-h-[28px] rounded cursor-pointer"
                 title="Clear schema"
                 aria-label="Clear schema input"
               >
@@ -68,7 +68,7 @@ export function SqlEditors({
             rows={10}
             maxLength={MAX_SCHEMA_LENGTH}
             spellCheck={false}
-            className="w-full h-full p-4 font-mono text-xs sm:text-sm text-slate-200 bg-transparent resize-y focus:outline-none placeholder:text-slate-600 disabled:opacity-50 leading-relaxed"
+            className="w-full h-full p-4 font-mono text-xs sm:text-sm text-slate-200 bg-transparent resize-y focus:outline-none placeholder:text-slate-500 disabled:opacity-50 leading-relaxed"
           />
         </div>
       </div>
@@ -85,7 +85,7 @@ export function SqlEditors({
           <div className="flex items-center gap-3">
             <span
               className={`text-[11px] font-mono ${
-                queryNearLimit ? 'text-amber-400 font-bold' : 'text-slate-500'
+                queryNearLimit ? 'text-amber-400 font-bold' : 'text-slate-400'
               }`}
             >
               {query.length.toLocaleString()} / {MAX_QUERY_LENGTH.toLocaleString()}
@@ -94,7 +94,7 @@ export function SqlEditors({
               <button
                 type="button"
                 onClick={() => onQueryChange('')}
-                className="text-slate-500 hover:text-slate-300 transition-colors"
+                className="p-1 -m-1 text-slate-400 hover:text-slate-200 transition-colors flex items-center justify-center min-w-[28px] min-h-[28px] rounded cursor-pointer"
                 title="Clear query"
                 aria-label="Clear query input"
               >
@@ -115,7 +115,7 @@ export function SqlEditors({
             rows={10}
             maxLength={MAX_QUERY_LENGTH}
             spellCheck={false}
-            className="w-full h-full p-4 font-mono text-xs sm:text-sm text-slate-200 bg-transparent resize-y focus:outline-none placeholder:text-slate-600 disabled:opacity-50 leading-relaxed"
+            className="w-full h-full p-4 font-mono text-xs sm:text-sm text-slate-200 bg-transparent resize-y focus:outline-none placeholder:text-slate-500 disabled:opacity-50 leading-relaxed"
           />
         </div>
       </div>

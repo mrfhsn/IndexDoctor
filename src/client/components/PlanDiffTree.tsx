@@ -32,7 +32,7 @@ function PlanNodeView({
       <div
         className={`p-2.5 rounded-lg border mb-1.5 transition-all ${
           isUsedTargetIndex
-            ? 'bg-emerald-950/40 border-emerald-500/50 shadow-sm shadow-emerald-950/40 ring-1 ring-emerald-500/30'
+            ? 'bg-emerald-950/40 border-emerald-500/50 ring-1 ring-emerald-500/30'
             : isAfter
               ? 'bg-slate-900/90 border-slate-800'
               : 'bg-slate-900/60 border-slate-800/80'
@@ -44,7 +44,7 @@ function PlanNodeView({
               <button
                 type="button"
                 onClick={() => setExpanded(!expanded)}
-                className="text-slate-500 hover:text-slate-300 p-0.5 cursor-pointer"
+                className="p-1 -m-0.5 text-slate-400 hover:text-slate-200 flex items-center justify-center min-w-[24px] min-h-[24px] rounded cursor-pointer"
                 aria-label={expanded ? 'Collapse plan node' : 'Expand plan node'}
               >
                 {expanded ? (
@@ -75,10 +75,10 @@ function PlanNodeView({
           </div>
 
           <div className="flex items-center gap-2 shrink-0 text-[11px]">
-            <span className="text-slate-500">
+            <span className="text-slate-400">
               cost: <span className="text-slate-300">{node.totalCost.toFixed(1)}</span>
             </span>
-            <span className="text-slate-500 hidden sm:inline">
+            <span className="text-slate-400 hidden sm:inline">
               rows: <span className="text-slate-300">{node.planRows}</span>
             </span>
           </div>
@@ -88,7 +88,7 @@ function PlanNodeView({
         {node.indexName && (
           <div className="mt-1.5 pl-5 flex items-center gap-2">
             <span
-              className={`text-[10px] font-mono px-2 py-0.5 rounded-md border font-medium ${
+              className={`text-[11px] font-mono px-2 py-0.5 rounded-md border font-medium ${
                 isUsedTargetIndex
                   ? 'bg-emerald-900/60 border-emerald-600 text-emerald-200'
                   : 'bg-slate-800 border-slate-700 text-slate-300'
@@ -101,10 +101,10 @@ function PlanNodeView({
 
         {/* Index / Filter conditions */}
         {(node.indexCond || node.filter) && (
-          <div className="mt-1 pl-5 text-[10px] text-slate-400 space-y-0.5">
+          <div className="mt-1 pl-5 text-[11px] text-slate-400 space-y-0.5">
             {node.indexCond && (
               <div className="truncate">
-                <span className="text-slate-500">Index Cond:</span> {node.indexCond}
+                <span className="text-slate-400">Index Cond:</span> {node.indexCond}
               </div>
             )}
             {node.filter && (
@@ -185,7 +185,7 @@ export function PlanDiffTree({
             ) : (
               <Copy className="w-3.5 h-3.5" />
             )}
-            <span className="text-[10px]">{copied ? 'Copied' : 'Copy'}</span>
+            <span className="text-xs">{copied ? 'Copied' : 'Copy'}</span>
           </button>
           <pre className="text-slate-300">{JSON.stringify({ before, after }, null, 2)}</pre>
         </div>
@@ -205,7 +205,7 @@ export function PlanDiffTree({
             {before?.tree ? (
               <PlanNodeView node={before.tree} highlightIndexes={[]} isAfter={false} />
             ) : (
-              <p className="text-xs text-slate-500 italic p-2">No before plan available</p>
+              <p className="text-xs text-slate-400 italic p-2">No before plan available</p>
             )}
           </div>
 
@@ -213,7 +213,7 @@ export function PlanDiffTree({
           <div className="space-y-2 p-4 rounded-xl bg-slate-900/90 border border-slate-800">
             <div className="flex items-center justify-between pb-2 border-b border-slate-800">
               <span className="text-xs font-semibold text-emerald-300 flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-emerald-500" />
                 After (With Recommended Index)
               </span>
               <span className="text-xs font-mono text-emerald-400 font-bold">
