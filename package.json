@@ -28,7 +28,7 @@
     "measure": "node scripts/measure.mjs"
   },
   "dependencies": {
-    "@electric-sql/pglite": "0.5.9",
+    "@electric-sql/pglite": "0.5.11",
     "@google/genai": "2.29.1",
     "@hono/node-server": "2.1.5",
     "hono": "4.13.13",
